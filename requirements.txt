@@ -1,0 +1,7 @@
+# Python 3.10 (tested on 3.10.12)
+# Pinned to the versions used to produce the shipped results/figures.
+numpy==2.2.6
+pandas==2.3.3
+scikit-learn==1.7.2
+xgboost==3.2.0
+matplotlib==3.10.8

@@ -1,0 +1,56 @@
+[
+  {
+    "scenario": "S0 Baseline",
+    "pm25": 12.592577696942788,
+    "no2": 35.86973996567361,
+    "AF_pm25": 0.05726246392386006,
+    "AF_no2_75pct": 0.08354704160008114,
+    "AF_combined": 0.13602539606837138,
+    "premature_deaths_per_year_per_million": 1183.4209457948311,
+    "DALYs_per_year_per_million": 21774.94540262489,
+    "avoided_deaths_per_year_per_million": 0.0,
+    "avoided_DALYs_per_year_per_million": 0.0
+  },
+  {
+    "scenario": "S1 AI+5G",
+    "pm25": 12.360922355606405,
+    "no2": 34.63183015629585,
+    "AF_pm25": 0.055612504239206155,
+    "AF_no2_75pct": 0.08038317849266398,
+    "AF_combined": 0.13152537287718602,
+    "premature_deaths_per_year_per_million": 1144.2707440315185,
+    "DALYs_per_year_per_million": 21054.581690179937,
+    "avoided_deaths_per_year_per_million": 39.15020176331268,
+    "avoided_DALYs_per_year_per_million": 720.3637124449524,
+    "avoided_deaths_inner_london": 137.02570617159438,
+    "avoided_DALYs_inner_london": 2521.2729935573334
+  },
+  {
+    "scenario": "S2 AI+6G",
+    "pm25": 12.254658437562192,
+    "no2": 34.06398161988404,
+    "AF_pm25": 0.054853708166258085,
+    "AF_no2_75pct": 0.07892684427579148,
+    "AF_combined": 0.1294511223596616,
+    "premature_deaths_per_year_per_million": 1126.224764529056,
+    "DALYs_per_year_per_million": 20722.53566733463,
+    "avoided_deaths_per_year_per_million": 57.19618126577507,
+    "avoided_DALYs_per_year_per_million": 1052.4097352902609,
+    "avoided_deaths_inner_london": 200.18663443021273,
+    "avoided_DALYs_inner_london": 3683.434073515913
+  },
+  {
+    "scenario": "S3 AI+6G+Demand",
+    "pm25": 11.883010001354068,
+    "no2": 32.07853634891068,
+    "AF_pm25": 0.052190270765608164,
+    "AF_no2_75pct": 0.0738099241196354,
+    "AF_combined": 0.12214803496025073,
+    "premature_deaths_per_year_per_million": 1062.6879041541813,
+    "DALYs_per_year_per_million": 19553.457436436933,
+    "avoided_deaths_per_year_per_million": 120.73304164064984,
+    "avoided_DALYs_per_year_per_million": 2221.4879661879568,
+    "avoided_deaths_inner_london": 422.56564574227446,
+    "avoided_DALYs_inner_london": 7775.207881657849
+  }
+]
