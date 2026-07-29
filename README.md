@@ -6,7 +6,7 @@
 | **Version** | v1.0.0 |
 | **Reproducibility** | Fully reproducible from source — `bash run_all.sh` |
 | **Data** | Synthetic, calibrated — see `DISCLAIMER.md` |
-| **Software DOI** | Pending Zenodo deposit |
+| **Software DOI** | [10.5281/zenodo.21679390](https://doi.org/10.5281/zenodo.21679390) (v1.0.0) · concept DOI [10.5281/zenodo.21679389](https://doi.org/10.5281/zenodo.21679389) |
 | **Paper DOI** | Pending publication |
 | **License** | MIT |
 
@@ -123,9 +123,10 @@ software archive.
 **Software and data**
 > Andra, L. S. Supplementary code and calibrated dataset for "Accessible Digital Twin Frameworks for
 > Sustainable Traffic and Air Quality in 6G-Enabled Smart Cities".
-> DOI: Pending Zenodo deposit.
+> DOI: 10.5281/zenodo.21679390
 
-Replace both DOIs once assigned, before distributing this package.
+The software DOI above resolves to the archived v1.0.0 release. The paper DOI will be added
+once IntechOpen assigns it. Repository: https://github.com/lohith9/Smart_Cities
 
 ## License
 

@@ -14,10 +14,12 @@ decision or a value that does not yet exist — do not invent them.
 | License | MIT |
 | Keywords | digital twin; traffic simulation; air quality; machine learning; 6G; smart cities; reproducibility; synthetic data |
 | Related identifier | "is supplement to" → chapter DOI (add once IntechOpen assigns it) |
-| Related identifier | "is supplemented by" → GitHub repository URL |
+| Related identifier | "is supplemented by" → https://github.com/lohith9/Smart_Cities |
 | Funding | TO BE ADDED — state none if unfunded |
 | Language | English |
-| Publication date | Date of Zenodo deposit |
+| Publication date | 2026-07-29 |
+| **Assigned version DOI** | 10.5281/zenodo.21679390 |
+| **Assigned concept DOI** | 10.5281/zenodo.21679389 |
 
 ## Order of operations
 

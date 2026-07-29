@@ -4,7 +4,7 @@ title: >-
   Frameworks for Sustainable Traffic and Air Quality in 6G-Enabled Smart Cities"
 message: >-
   If you use this software or dataset, please cite both the chapter and this
-  software archive. DOI: pending publication and Zenodo deposit.
+  software archive.
 type: software
 authors:
   - given-names: Lohith Sai
@@ -12,9 +12,10 @@ authors:
     affiliation: Independent Researcher, Richmond, Virginia, USA
     email: lohithsaiandra18@gmail.com
 license: MIT
-repository-code: "TO BE ADDED - public repository URL"
+doi: 10.5281/zenodo.21679390
+repository-code: "https://github.com/lohith9/Smart_Cities"
 version: 1.0.0
-date-released: "TO BE ADDED"
+date-released: "2026-07-29"
 keywords:
   - digital twin
   - traffic simulation

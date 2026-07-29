@@ -14,8 +14,8 @@
 | License | MIT |
 | Author | Lohith Sai Andra, Independent Researcher, Richmond, Virginia, USA |
 | ORCID | TO BE ADDED |
-| Repository | TO BE ADDED |
-| Software DOI | Pending Zenodo deposit |
+| Repository | https://github.com/lohith9/Smart_Cities |
+| Software DOI | 10.5281/zenodo.21679390 (v1.0.0); concept DOI 10.5281/zenodo.21679389 |
 | Paper DOI | Pending publication |
-| Release date | TO BE ADDED |
+| Release date | 2026-07-29 |
 | Data statement | All datasets are synthetic, calibrated to published Inner-London priors. Not measurements. |
