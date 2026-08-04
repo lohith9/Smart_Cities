@@ -1,5 +1,8 @@
 # Python 3.10 (tested on 3.10.12)
-# Pinned to the versions used to produce the shipped results/figures.
+# Pinned to the versions used to produce the shipped results in data/.
+# The shipped figures in figures/ were rendered with matplotlib 3.10.9, not the
+# 3.10.8 pinned below; figure PNGs are not byte-reproducible across matplotlib
+# patch versions. See RC1_RELEASE_CERTIFICATE.md. No reported number is affected.
 numpy==2.2.6
 pandas==2.3.3
 scikit-learn==1.7.2

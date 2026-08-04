@@ -1,6 +1,9 @@
 """
-v2_07_figures_AUDITED.py  — reviewer-safe regeneration of Figures 8-12.
-Fixes applied (see FIGURE_AUDIT_REPORT.md):
+v2_07_figures.py  — reviewer-safe regeneration of Figures 8-12.
+Fixes applied (recorded in the author's internal figure-audit notes, which are
+not part of this repository; an earlier version of this header named the file
+"v2_07_figures_AUDITED.py" and cited a "FIGURE_AUDIT_REPORT.md" that the
+repository does not contain):
   Fig8 : removed 'beats'; neutral title; honest log-RMSE incl. uncalibrated physics; modest ML gain shown on full R2 axis.
   Fig9 : full 0-1 R2 axis (no zoom); explicit note that local XGB matches/exceeds graph variants (null result).
   Fig10: error bars from delay_std; neutral title; naive 'always-throttle' reference bar; illustrative-proxy caveat.

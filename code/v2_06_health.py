@@ -8,12 +8,25 @@ Methodology:
     GEMM model. We use a linearised approximation valid in 5-20 ug/m^3 range:
         RR(c) = 1 + alpha * (c - c0)
     with alpha (relative-risk per ug/m3) calibrated to GBD 2019 IER.
-  - NO2 -> mortality: HRAPIE (WHO 2013) recommends RR = 1.039 per
-    10 ug/m3 increment in NO2 (all-cause mortality, adults 30+).
-  - Baseline mortality rate: ~9 per 1000 (population averaged for the UK).
-  - DALYs: from GBD 2019, 1 premature death from ambient air pollution
-    approximately = 16 years of life lost (YLL); we add a 0.15 multiplier
+  - NO2 -> mortality: RR = 1.039 per 10 ug/m3 increment (all-cause mortality).
+    NOTE: an earlier version of this header attributed 1.039 to HRAPIE. HRAPIE
+    does not recommend that value. Its recommendation is RR = 1.055
+    (95% CI 1.031-1.080) per 10 ug/m3 for all (natural) cause mortality, age
+    30+, quantified only above an annual mean of 20 ug/m3 (Heroux et al.,
+    Int J Public Health 2015;60:619-627, Table 1 - the published WHO/Europe
+    HRAPIE recommendations). The 1.039 used here is lower than HRAPIE's value
+    and its derivation is not documented; treat it as an assumed input.
+  - Baseline mortality rate: ~9 per 1000, all ages, population averaged for the
+    UK. (ONS: crude mortality in England and Wales was 893.1 per 100,000 in
+    2019.) The relative risks above are stated for adults 30+, so pairing them
+    with an all-ages baseline rate is an approximation, not a matched pair.
+  - DALYs: 1 premature death from ambient air pollution is taken to be
+    approximately 16 years of life lost (YLL); we add a 0.15 multiplier
     for years lived with disability (YLD) from cardio-respiratory disease.
+    NOT VERIFIED: no GBD 2019 statement of 16 YLL per death was located. GBD
+    2019 reports 4.14 million deaths and 118.2 million DALYs globally from
+    ambient PM2.5, a ratio of about 28 DALYs per death, but that is a global
+    figure dominated by younger decedents and does not settle a UK value.
 """
 import json
 import numpy as np
@@ -34,17 +47,24 @@ SCEN = [
     for i in range(len(_scen_raw))
 ]
 
-# Counter-factual minimum exposure (cf MRL): 5 ug/m3 (WHO 2021 AQG)
+# Counter-factual minimum exposure (cf MRL), both set to 5 ug/m3.
+# 5 ug/m3 is the WHO 2021 AQG annual-mean level for PM2.5. It is NOT the WHO 2021
+# level for NO2, which is 10 ug/m3; HRAPIE quantifies NO2 mortality only above an
+# annual mean of 20 ug/m3. NO2_CF is therefore an assumed input, not a guideline
+# value. An earlier version of this comment attributed both to the WHO 2021 AQG.
 PM25_CF = 5.0
 NO2_CF  = 5.0
 
 # Relative-risk parameters
 ALPHA_PM25 = 0.008   # per ug/m3 (linearised GBD IER, all-cause mort, urban adults)
-RR_NO2_PER_10 = 1.039  # HRAPIE
+RR_NO2_PER_10 = 1.039  # assumed input; HRAPIE's own value is 1.055 (see header)
 YLL_PER_DEATH = 16.0
 YLD_TO_YLL_RATIO = 0.15
 
-# Baseline mortality rate per 100,000 person-years (UK all-cause, adults 30+)
+# Baseline mortality rate per 100,000 person-years, UK all-cause, ALL AGES.
+# (ONS crude mortality, England and Wales, 2019: 893.1 per 100,000.) An earlier
+# version of this comment labelled it "adults 30+"; 870 is an all-ages crude
+# rate, and the adults-30+ rate is substantially higher.
 BASE_MORT = 870.0
 POP = 1_000_000   # per million
 

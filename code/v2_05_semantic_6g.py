@@ -2,9 +2,13 @@
 v2_05_semantic_6g.py
 Semantic-communication autoencoder for 6G uplink compression.
 
-Following Gunduz et al. (IEEE JSAC 2023, 'Beyond Transmitting Bits: Context,
-Semantics, and Task-Oriented Communications'), Shi et al. (Proc IEEE 2023)
-and Strinati & Barbarossa (2024), we encode the multi-modal sensor packet
+Following Gunduz et al. (IEEE JSAC 41:5-41, 2023, 'Beyond Transmitting Bits:
+Context, Semantics, and Task-Oriented Communications'), Shi et al. (Proc IEEE
+2023; NOT VERIFIED - no such paper was located in Crossref) and Calvanese
+Strinati & Barbarossa ('6G networks: Beyond Shannon towards semantic and
+goal-oriented communications', Computer Networks 190:107930, 2021 - an earlier
+version of this header dated this two-author paper to 2024), we encode the
+multi-modal sensor packet
 {flow, hdv, pm25, no2, wind, mh, temp, rh, hour_sin, hour_cos, dow_sin,
 dow_cos} -> 12 floats per timestep, into a compressed semantic representation
 of dimension d_sem in {2, 3, 4, 6}, and reconstruct it at the edge twin.

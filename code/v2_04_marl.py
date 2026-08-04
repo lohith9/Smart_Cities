@@ -4,15 +4,23 @@ Multi-Agent Reinforcement Learning signal control (PressLight-inspired).
 
 We implement a lightweight MARL controller in which each of the 10 junctions
 runs an independent tabular Q-learning agent. Following Wei et al. (KDD 2019,
-'PressLight'), the local reward is defined as the negative *pressure* of the
-junction - the difference between upstream queue and downstream queue:
+'PressLight: Learning Max Pressure Control to Coordinate Traffic Signals in
+Arterial Network', doi:10.1145/3292500.3330949), the local reward is driven by
+the *pressure* at the junction. This implementation uses a simplified,
+undirected pressure - own served flow minus the mean over graph neighbours -
+rather than PressLight's directed upstream-minus-downstream sum:
 
-    pressure(i,t) = sum_{j in upstream}  q(j,t)
-                  - sum_{k in downstream} q(k,t)
+    pressure(i,t) = q(i,t) - mean_{j in neighbours(i)} q(j,t)
 
-State: discretised (low/med/high) (own_flow, neighbour_flow, hour_phase).
-Action: choose green split bias in {-1, 0, +1} (favour upstream, neutral, favour downstream).
-Reward: -|pressure| - 0.05 * delay_proxy.
+State: (own_flow, neighbour_flow, hour_phase), each discretised into 5 bins
+(flow edges 0/250/450/700/1100/1700; hour edges 0/6/10/16/20/24), giving 125
+states. An earlier version of this header described the discretisation as
+three-level (low/med/high).
+Action: choose green split bias in {-1, 0, +1}, applied as a -8% / 0% / +8%
+change to the flow the junction serves.
+Reward: -|pressure|/200 - 0.5 * delay_proxy. An earlier version of this header
+gave the reward as "-|pressure| - 0.05 * delay_proxy", which is not what
+train_marl implements.
 
 Compared baselines:
   - Fixed-time:      static signal split, no adaptation

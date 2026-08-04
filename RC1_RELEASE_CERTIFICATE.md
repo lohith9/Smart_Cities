@@ -34,7 +34,7 @@ not measurements. See `DISCLAIMER.md`.
 | Synthetic-data disclaimer | Pass — `DISCLAIMER.md` |
 | Security policy | Pass — `SECURITY.md` |
 | Version and history | Pass — `VERSION`, `CHANGELOG.md`, `RELEASE_NOTES.md` |
-| Integrity manifest | Pass — `MANIFEST.sha256`, 57 files, self-verified with `sha256sum -c` |
+| Integrity manifest | Pass — `MANIFEST.sha256`, 59 files, self-verified with `sha256sum -c` |
 | Documentation completeness | Pass — README answers install, run, runtime, outputs, output-to-manuscript mapping, versions, reproduction, citation |
 | **Clean-room execution** | **Pass — all 12 pipeline steps completed from an emptied copy** |
 

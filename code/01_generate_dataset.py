@@ -13,9 +13,27 @@ Calibration anchors (published London measurements; see chapter Sections 4.1 and
     (GLA, Air Quality in London 2016-2024, Table 7. Central London roadside is
     substantially higher, 63-93 ug/m3 over 2016-2019.)
   - Diurnal traffic pattern peaks 07:30-09:30 and 17:00-19:00 (TfL flow data)
-  - Average inner-London car flow on a major corridor: ~600-900 veh/h peak,
-    150-300 veh/h off-peak
-  - Wind speed mean: 3.5 m/s, RH ~75% (Heathrow met)
+  - Corridor flow: the generator is tuned to a peak-hour mean near 900 veh/h and
+    an overnight (02:00-05:00) mean near 180 veh/h. The series it produces has a
+    peak-hour (08:00, 17:00, 18:00) mean of 907 veh/h and an overnight mean of
+    178 veh/h. NOTE: an earlier version of this header gave the anchor as
+    "~600-900 veh/h peak", which the generator's own output already exceeds.
+    No published average was located for this quantity. DfT road traffic
+    statistics (raw hourly counts, 2019, principal A roads in eight inner-London
+    boroughs, n = 145 link-direction-days) give a per-direction peak-hour mean
+    flow with median 497 veh/h and quartiles 336-1133 veh/h; the A501
+    (Marylebone Road / Euston Road / Pentonville Road) runs 1506-2284 veh/h per
+    direction. The corridor modelled here is therefore a mid-range inner-London
+    arterial, not an average one, and the figures above describe this generator
+    rather than any measured site.
+  - Wind speed and humidity are generator parameters, not measurements: the wind
+    draw has mean 3.52 m/s and the generated series has a wind mean of 3.53 m/s
+    and a relative-humidity mean of 69.6%. NOTE: an earlier version of this
+    header gave "3.5 m/s, RH ~75% (Heathrow met)". Neither figure is a Heathrow
+    observation, and 75% does not describe this dataset. For reference, the
+    Heathrow means over 1 April 2018 to 28 February 2020 are 4.02 m/s and
+    76.02% RH (Hajmohammadi & Heydecker 2022, Atmospheric Pollution Research
+    13(8):101514, Table 2).
 The generated CSV is statistically realistic but is NOT a substitute for live
 LAQN/TfL feeds. The chapter's reproducibility note explains how to swap in real
 data with no code changes.
@@ -79,7 +97,17 @@ df["mixing_height_m"] = (350 + 600 * np.maximum(0, np.sin(2 * np.pi * (df.hour -
                           + rng.normal(0, 80, len(df))).clip(150, 1500).round(0)
 
 # --- Pollutant generation (calibrated emission-based model) ---
-# Emission factors (g/km), based on COPERT/EEA inventory averages for Inner London fleet 2023:
+# Emission factors (g/km). These four values are fleet-average model parameters,
+# each of the same order as the class-specific factors tabulated in the EMEP/EEA
+# inventory, and cross-checked against LAEI. They are NOT quoted from any single
+# table: the guidebook stratifies factors by fuel, size class and Euro standard
+# rather than by the two-class light/heavy split used here, and it expresses its
+# nitrogen-oxide factors as NO2 equivalent, so the EF_NO2_* names below denote
+# NOx-as-NO2 rather than primary NO2. The NOx-to-NO2 conversion is absorbed into
+# the calibrated coupling coefficient applied to emiss_no2 below. See chapter
+# Section 4.4. NOTE: an earlier version of this comment read "based on COPERT/EEA
+# inventory averages for Inner London fleet 2023"; neither the averaging step nor
+# the 2023 fleet-year was ever verified against the inventory.
 EF_PM25_LDV = 0.024  # g/km for light-duty vehicles (PM2.5)
 EF_PM25_HDV = 0.085  # g/km for heavy-duty vehicles
 EF_NO2_LDV  = 0.42   # g/km

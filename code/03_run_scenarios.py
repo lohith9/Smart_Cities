@@ -53,9 +53,13 @@ def scenario(name, *, flow_mult, speed_mult, ctrl_latency_ms, ctrl_hz,
     e_pm = flow * (ldv * EF_PM25_LDV + df.hdv_fraction * EF_PM25_HDV)
     e_no = flow * (ldv * EF_NO2_LDV  + df.hdv_fraction * EF_NO2_HDV)
     disp = 1.0 / (np.maximum(df.wind_speed_ms, 0.5) * df.mixing_height_m / 1000)
-    # Slower speed -> more idling -> +12% emission per 25% speed drop (empirical)
     # Smoother flow at higher speeds -> less stop-and-go -> lower emission factor.
-    # COPERT-style: emissions scale ~ 1/speed at low urban speeds.
+    # Emissions are taken to scale as 1/speed at low urban speeds, so the penalty
+    # below is exactly the inverse of speed_mult (bounded to [0.78, 1.5]): a 25%
+    # speed reduction raises emissions by 33%, and the 6% uplift in S1 lowers them
+    # by 5.7%. This 1/speed form is an assumed relation; no source is claimed for
+    # it. NOTE: an earlier version of this comment read "+12% emission per 25%
+    # speed drop (empirical)", which matches neither the code nor any cited source.
     idle_penalty = (df.mean_speed_kmh / np.maximum(spd, 5)).clip(0.78, 1.5)
     bg_pm, bg_no = 8.5, 14
     pm25 = bg_pm + 0.32  * e_pm * disp * idle_penalty

@@ -1,6 +1,7 @@
 # DOI update checklist
 
-**STATUS: software DOIs applied 2026-07-28.**
+**STATUS: software DOIs applied 2026-07-29.** (An earlier version of this line read 2026-07-28.
+DataCite records both DOIs as registered 2026-07-29T14:27:29Z, so they did not exist on the 28th.)
 
 Assigned:
 - version DOI (v1.0.0): `10.5281/zenodo.21679390`
@@ -39,6 +40,6 @@ Still outstanding, and correctly left blank: **paper DOI** (chapter not yet publ
 ## After editing
 
 - [x] `bash make_manifest.sh` (the manifest hashes change)
-- [ ] `git add -A && git commit -m "Add Zenodo DOI after release"`
-- [ ] `git tag -a v1.0.1 -m "Documentation-only: DOI insertion"` — see CHANGELOG
+- [x] `git add -A && git commit -m "Add Zenodo DOI after release"` — commit `ad35059`
+- [x] `git tag -a v1.0.1 -m "Documentation-only: DOI insertion"` — see CHANGELOG
 - [ ] Build the submission ZIP from the tag you intend to cite

@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-# Full pipeline — reproduces the 7 chapter-body figures AND the 5 Section 7
-# supporting figures (PINN, ST-GCN, MARL, semantic, health). Runs from ANY cwd.
+# Full pipeline — reproduces the 7 chapter-body figures AND the 5 figures
+# supporting Supplementary Appendix D (PINN, ST-GCN, MARL, semantic, health).
+# The advanced extensions were moved from the chapter body to Appendix D during
+# revision; earlier versions of this script called them "Section 7".
+# Runs from ANY cwd.
 set -euo pipefail
 cd "$(dirname "$0")/code"
 echo "[1/12] 01_generate_dataset.py";    python3 01_generate_dataset.py
@@ -15,4 +18,4 @@ echo "[9/12] v2_04_marl.py";             python3 v2_04_marl.py
 echo "[10/12] v2_05_semantic_6g.py";      python3 v2_05_semantic_6g.py
 echo "[11/12] v2_06_health.py";          python3 v2_06_health.py
 echo "[12/12] v2_07_figures.py";         python3 v2_07_figures.py
-echo "PIPELINE COMPLETE — figs 1-7 (chapter body) and 8-12 (Section 7 supporting evidence)"
+echo "PIPELINE COMPLETE — figs 1-7 (chapter body) and 8-12 (Appendix D supporting evidence)"

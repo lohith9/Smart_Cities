@@ -3,8 +3,9 @@ v2_03_stgnn.py
 Spatio-Temporal Graph Convolution traffic predictor.
 
 We implement a lightweight ST-GCN in pure numpy + sklearn following the
-formulation of Yu, Yin, Zhu (IJCAI 2018, 'STGCN: Spatio-Temporal Graph
-Convolutional Networks for Traffic Forecasting'):
+formulation of Yu, Yin, Zhu (IJCAI 2018, 'Spatio-Temporal Graph Convolutional
+Networks: A Deep Learning Framework for Traffic Forecasting', pp. 3634-3640,
+doi:10.24963/ijcai.2018/505):
 
    H_l+1 = sigma( A_hat @ H_l @ W_l )    (spatial graph convolution)
 

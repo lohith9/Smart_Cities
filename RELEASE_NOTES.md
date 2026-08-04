@@ -6,7 +6,10 @@ Reproducibility package accompanying the revised chapter submitted to IntechOpen
 *Smart Cities — Next-Generation Connectivity and Intelligence*.
 
 ### Contents
-- `code/01`–`05`: corridor pipeline reproducing chapter Figures 3–7 and Table 4.
+- `code/01`–`05`: corridor pipeline reproducing chapter Figures 1–7 and Tables 4, 5 and 6.
+  (Figures 1 and 2 are schematics, also drawn by `04_make_figures.py`; Table 3 is the
+  hyperparameter table declared in `02_train_ml_models.py`. See the mapping table in
+  `README.md`, which is authoritative.)
 - `code/v2_01`–`v2_07`: demonstrations supporting Supplementary Appendix D (Figures 8–12).
 - `data/`: the calibrated synthetic dataset and every generated result file.
 - `figures/`: all twelve figures at 300 DPI.

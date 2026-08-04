@@ -69,12 +69,13 @@ completed. Results against the shipped outputs:
   bit-identical output matters more than speed.
 - **Timing fields.** `fit_time_s` and `pred_time_ms` are machine-dependent and will always differ.
 
-### One stale artefact
+### One stale artefact — resolved before v1.0.0
 
-The shipped `data/health_results.json` was produced from rounded inputs (PM2.5 12.59 rather than
-12.5926) and therefore differs from a fresh run by up to 0.032 per cent. No value from this file
-appears in the chapter or the supplement, so no claim is affected. Running `run_all.sh` once
-before tagging brings every shipped output into correspondence with a single consistent run.
+`data/health_results.json` had been produced from rounded inputs (PM2.5 12.59 rather than
+12.5926). It was regenerated before the v1.0.0 tag and the shipped file now carries the
+full-precision values from `data/scenarios.json` (for example `"pm25": 12.592577696942788`
+against `"mean_pm25_ugm3": 12.592577696942788`), so it corresponds to a single consistent run.
+See `RC1_RELEASE_CERTIFICATE.md`, "Resolved during RC1".
 
 ## Known limitations
 
