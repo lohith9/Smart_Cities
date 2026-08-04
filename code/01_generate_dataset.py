@@ -3,9 +3,15 @@
 Build a calibrated synthetic Inner-London traffic + air quality dataset for the
 digital twin case study.
 
-Calibration anchors (all from published Inner-London literature, cited in chapter):
-  - PM2.5 annual mean Inner London 2023: ~11-13 ug/m3 (LAQN, Marylebone Road)
-  - NO2 annual mean Inner London 2023: ~35-50 ug/m3 (kerbside)
+Calibration anchors (published London measurements; see chapter Sections 4.1 and 5.1):
+  - PM2.5 annual mean, Inner London 2018-2019: ~11-13 ug/m3
+    (GLA, Air Quality in London 2016-2024, Table 9. NOTE: an earlier version of
+    this header dated the band to 2023 and attributed it to Marylebone Road.
+    Both were wrong: the 2023 London annual means are 7.8-10.0 ug/m3, and the
+    site attribution was never verified.)
+  - NO2 annual mean, inner-London roadside 2018-2019: ~35-50 ug/m3
+    (GLA, Air Quality in London 2016-2024, Table 7. Central London roadside is
+    substantially higher, 63-93 ug/m3 over 2016-2019.)
   - Diurnal traffic pattern peaks 07:30-09:30 and 17:00-19:00 (TfL flow data)
   - Average inner-London car flow on a major corridor: ~600-900 veh/h peak,
     150-300 veh/h off-peak

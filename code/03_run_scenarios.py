@@ -8,16 +8,17 @@ Compute four operational scenarios for the case study:
   S3 - AI-OPT (6G) + DEMAND MGMT: same + congestion-aware soft demand reduction
                        (-15% peak), e.g. dynamic pricing / route advisories.
 
-Scenario parameters are ASSUMED INPUTS, not derived quantities. Their
-magnitudes are of the order reported for adaptive signal control in the
-review literature (see chapter reference [34], Eom & Kim 2020, European
-Transport Research Review 12:50), but this implementation does not derive
-them from any specific source:
+Scenario parameters are ASSUMED INPUTS, not derived quantities. This
+implementation does not derive them from any published source:
   - adaptive control: speed uplift assumption
   - sub-second update loops: the extra_delay_red term below
   - coupled demand management: peak flow multiplier plus speed uplift
-An earlier version of this header attributed these magnitudes to a 2024
-meta-analysis that could not be verified in Crossref and has been removed.
+Two attributions have been removed from this header after verification.
+A 2024 meta-analysis could not be found in Crossref. Eom & Kim 2020
+(European Transport Research Review 12:50) was then cited in its place, but
+the full text contains no percentage figures of any kind: it classifies 72
+papers by performance index and does not report delay reductions. Neither
+source supported the magnitudes used here, and no replacement is claimed.
 See chapter Section 5.2, which discloses every parameter used here.
 
 Pollutant response uses the same dispersion/emission model the dataset was
