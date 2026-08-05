@@ -26,7 +26,6 @@ Outputs:
 import json
 import time
 import numpy as np
-import pandas as pd
 import xgboost as xgb
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 

@@ -115,7 +115,6 @@ def fixed_policy(n, s):
 
 def greedy_policy(n, s):
     # Decode: state = ((o*N)+n2)*N_HOUR + h ; we need own o vs nbr n2
-    h = s % N_HOUR_STATES
     rem = s // N_HOUR_STATES
     nbr_o = rem % N_FLOW_STATES
     own_o = rem // N_FLOW_STATES
@@ -206,4 +205,4 @@ for p in results["policies"]:
 with open(f"{DATA}/marl_results.json", "w") as f:
     json.dump(results, f, indent=2)
 pd.DataFrame(curve).to_csv(f"{DATA}/marl_learning_curve.csv", index=False)
-print(f"\nSaved -> marl_results.json, marl_learning_curve.csv")
+print("\nSaved -> marl_results.json, marl_learning_curve.csv")

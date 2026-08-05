@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Software name | Accessible Digital Twin — traffic and air-quality reproducibility package |
-| Version | v1.0.3 (archived and cited release: v1.0.0) |
+| Version | v1.0.4 (archived and cited release: v1.0.0) |
 | Programming language | Python |
 | Python version | 3.10 (tested on 3.10.12) |
 | Dependencies | numpy 2.2.6, pandas 2.3.3, scikit-learn 1.7.2, xgboost 3.2.0, matplotlib 3.10.8 |
