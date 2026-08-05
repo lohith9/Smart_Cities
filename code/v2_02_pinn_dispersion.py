@@ -128,7 +128,6 @@ print(f"Physics-only mean NO2: {C_phys.mean():.2f}  (obs={no2.mean():.2f})")
 # ----- (A) Pure data-driven (XGBoost) ---------------------------------------
 def build_feats(arr_dict, n):
     """Per-node feature matrix."""
-    T = arr_dict["flow"].shape[0]
     f = np.column_stack([
         arr_dict["flow"][:, n],
         arr_dict["hdv"][:, n],

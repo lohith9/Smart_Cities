@@ -23,8 +23,17 @@ Single CPU core is sufficient. No GPU required.
 
 A single seed, **20260516**, is used throughout: the NumPy generator in
 `01_generate_dataset.py`, and `random_state` for scikit-learn and XGBoost. XGBoost runs
-single-threaded (`n_jobs=1`) for cross-machine determinism; Random Forest is deterministic
-given `random_state`. Evaluation seeds 100–104 are used in the Appendix D scripts.
+single-threaded (`n_jobs=1`); Random Forest is deterministic given `random_state`, run to
+run, on one machine. Evaluation seeds 100–104 are used in the Appendix D scripts.
+
+`n_jobs=1` guarantees XGBoost is deterministic **run to run on one machine** — this was
+measured directly (see "Determinism, measured" below) and holds exactly. It does **not**
+guarantee determinism **across machines/platforms**: XGBoost's histogram-based tree
+construction is not bit-reproducible across CPU/compiler/platform combinations even with a
+fixed seed, and this was also measured directly, diverging in the cross-platform check
+below. An earlier version of this note claimed single-threading was "for cross-machine
+determinism" — that claim is what the check below disproves; it has been removed rather
+than left standing against the evidence.
 
 ## Expected outputs
 
@@ -68,6 +77,77 @@ completed. Results against the shipped outputs:
   reported figure, all of which are quoted to three decimal places or fewer. Set `n_jobs=1` if
   bit-identical output matters more than speed.
 - **Timing fields.** `fit_time_s` and `pred_time_ms` are machine-dependent and will always differ.
+
+## Determinism, measured
+
+Two separate checks, run in the same session, on Windows 11 / Intel Core 7 150U (10 cores) /
+Python 3.11.9, packages installed exactly per `requirements.txt`. Full methodology and every
+individual value are in `tests/README.md`; this section gives the headline numbers.
+
+### Same-platform, repeated runs (10x)
+
+`02_train_ml_models.py`'s exact training step (same features, split, seed, hyperparameters)
+was run 10 times in this one environment. Spread = max − min across the 10 runs:
+
+| Target | Model | r2 spread | rmse spread | mae spread | Unique values / 10 |
+|---|---|---|---|---|---|
+| traffic_flow_vph | LinearRegression | 0 | 0 | 0 | 1 |
+| traffic_flow_vph | RandomForest | 0 | 1.421e-14 | 7.105e-15 | up to 3 |
+| traffic_flow_vph | XGBoost | 0 | 0 | 0 | 1 |
+| pm25_ugm3 | LinearRegression | 0 | 0 | 0 | 1 |
+| pm25_ugm3 | RandomForest | 0 | 8.882e-16 | 2.220e-16 | up to 3 |
+| pm25_ugm3 | XGBoost | 0 | 0 | 0 | 1 |
+| no2_ugm3 | LinearRegression | 0 | 0 | 0 | 1 |
+| no2_ugm3 | RandomForest | 1.110e-16 | 2.665e-15 | 1.776e-15 | up to 4 |
+| no2_ugm3 | XGBoost | 0 | 0 | 0 | 1 |
+
+XGBoost and LinearRegression were bit-identical across all 10 runs, every metric, every
+target. RandomForest showed the last-bit thread-summation noise `RC1_RELEASE_CERTIFICATE.md`
+already documents (max ~2.7e-15 absolute on RMSE ≈ 7.47) — real, but roughly 12 orders of
+magnitude below the precision (2–3 decimal places) at which any of these values is quoted.
+**Conclusion: same-platform reproduction is not merely close, it is exact to the precision the
+chapter uses, for every model.**
+
+### Cross-platform: this machine vs. the Linux environment the shipped data was built on
+
+The full 12-step pipeline was run clean-room (`tests/verify_reproduction.py`) and every
+output compared against the committed `data/` files, which were generated on Linux
+(`SOFTWARE_METADATA.md`). Verified by direct inspection of both the aggregate metrics and the
+underlying per-row predictions, not inferred:
+
+| Quantity | Cross-platform result |
+|---|---|
+| `LinearRegression` (all targets) | **exact** — 0 differences |
+| `RandomForestRegressor` (all targets, `n_jobs=-1`) | **exact** — 0 differences, including every `predictions.csv` row |
+| `scenarios.json/.csv`, `health_results.json`, `v2_network.npz`, `v2_adjacency.npy`, `v2_node_table.csv`, `marl_results.json`, `marl_learning_curve.csv`, `london_corridor.csv` | **exact** — no ML training involved |
+| `semantic_results.json` (PCA + MLPRegressor) | **exact** on this run — single-run evidence, not a guarantee |
+| `XGBRegressor` (`n_jobs=1`, all targets) | **diverges** — see below |
+
+XGBoost aggregate `r2` diverged by 5.7e-4 (traffic_flow_vph) to **1.7e-2 relative**
+(no2_ugm3: published 0.9223 → 0.9384 on this platform). `rmse` and `mae` diverged by up to
+11–15% on the same target; MAPE by 9.5%. Individual `predictions.csv` rows diverged by up to
+~30%, and `feature_importance.csv` rankings reordered from roughly the third-ranked feature
+onward for every target.
+
+**This is a real, measured limitation, disclosed here rather than fixed, per the rule that no
+seed, hyperparameter or reported value may be changed to chase it.** It is not evidence of an
+error in the pipeline's design, seeding, or the published values — the seed and `n_jobs=1`
+setting do their documented job perfectly on one machine (see above). The mechanism is a
+known, published category of issue: histogram-based gradient-boosted tree construction
+(XGBoost's default tree method) is not guaranteed bit-reproducible across different
+CPU/compiler/OS/wheel combinations even with an identical seed, because the floating-point
+summation order in its quantile-sketch binning step can differ by platform.
+`RandomForestRegressor` and `LinearRegression`, which use different underlying numerical code
+paths, do not show this sensitivity on the platforms tested here.
+
+**Practical implication:** every scenario, health, network-topology, and delay/emission-model
+result in the chapter reproduces exactly on a different OS than the one used to generate the
+shipped data. The specifically **XGBoost-derived** entries in Table 4 (and the XGBoost columns
+of any supplementary detail table) should be understood as reproducible on the tested platform
+(Linux) but not guaranteed to the same decimal places elsewhere — a reader reproducing Table 4
+on Windows should expect the XGBoost row's R²/RMSE/MAE to differ from the printed value by up
+to roughly 2 percentage points, while every other reported number in the chapter should
+reproduce exactly.
 
 ### One stale artefact — resolved before v1.0.0
 

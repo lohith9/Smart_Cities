@@ -16,7 +16,6 @@ import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from pathlib import Path
-import os as _os
 ROOT = Path(__file__).resolve().parent.parent
 DATA = str(ROOT / "data")
 FIG  = str(ROOT / "figures")

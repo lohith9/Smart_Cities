@@ -104,7 +104,7 @@ for r in results:
     r["avoided_deaths_per_year_per_million"] = float(base["premature_deaths_per_year_per_million"] - r["premature_deaths_per_year_per_million"])
     r["avoided_DALYs_per_year_per_million"]   = float(base["DALYs_per_year_per_million"] - r["DALYs_per_year_per_million"])
 
-print(f"\n=== Health-endpoint coupling (per million population) ===")
+print("\n=== Health-endpoint coupling (per million population) ===")
 print(f"{'Scenario':24s} {'PM2.5':>6s} {'NO2':>6s} {'Deaths/yr':>10s} {'DALYs/yr':>10s} {'Avoid_deaths':>14s} {'Avoid_DALYs':>13s}")
 for r in results:
     print(f"  {r['scenario']:22s} {r['pm25']:6.2f} {r['no2']:6.2f} "

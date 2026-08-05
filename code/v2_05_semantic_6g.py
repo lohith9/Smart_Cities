@@ -147,4 +147,4 @@ with open(f"{DATA}/semantic_results.json", "w") as f:
     json.dump(results, f, indent=2)
 if isinstance(recon_dump, pd.DataFrame):
     recon_dump.to_csv(f"{DATA}/semantic_reconstruction.csv", index=False)
-print(f"Saved -> semantic_results.json")
+print("Saved -> semantic_results.json")

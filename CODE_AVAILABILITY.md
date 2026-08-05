@@ -9,7 +9,7 @@ This repository accompanies the chapter
 
 | | |
 |---|---|
-| Repository version | v1.0.3 (archived and cited release: v1.0.0) |
+| Repository version | v1.0.4 (archived and cited release: v1.0.0) |
 | Repository DOI | 10.5281/zenodo.21679390 (v1.0.0) |
 | Concept DOI (all versions) | 10.5281/zenodo.21679389 |
 | Repository | https://github.com/lohith9/Smart_Cities |

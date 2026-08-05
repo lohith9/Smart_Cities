@@ -3,6 +3,77 @@
 All notable changes to this reproducibility package.
 Format follows Keep a Changelog; versioning follows Semantic Versioning.
 
+## [1.0.4] — reproduction harness, measured determinism, static cleanup
+
+Adds a runnable reproduction check and documents what it found. No seed, hyperparameter,
+emission factor, coupling coefficient, scenario multiplier, or split ratio was changed. No
+`data/` or `figures/` file changed (confirmed: `git diff --stat -- data figures` empty
+throughout this pass). For each of the seven edited `.py` files, `ast.parse` succeeds and the
+change is a real (not cosmetic) removal of dead code — see "Fixed — code" below; this release
+does not claim AST identity for those seven files the way v1.0.2/v1.0.3 did for docstring-only
+edits, because these edits are not docstring-only. All seven were verified behaviour-preserving
+by actually running the full 12-step pipeline afterward and confirming every non-XGBoost output
+still matches the committed `data/` files exactly (see below).
+
+### Added
+- `tests/verify_reproduction.py` and `tests/README.md`. A clean-room reproduction harness: runs
+  all 12 pipeline steps in a temporary directory (never touches this repository's `data/` or
+  `figures/`) and compares every output against the committed files. No network access, no
+  SUMO. Run against the pinned environment on Windows 11 (Intel Core 7 150U, Python 3.11.9): all
+  12 steps exit zero; every non-XGBoost output — `LinearRegression` and `RandomForestRegressor`
+  results, `scenarios.json/.csv`, `health_results.json`, the `v2_network` files,
+  `marl_results.json`, `london_corridor.csv` — matches the shipped values (generated on Linux,
+  per `SOFTWARE_METADATA.md`) exactly. `XGBRegressor`-derived values do not: see
+  `REPRODUCIBILITY.md`, "Determinism, measured", for the full account. Two real bugs in the
+  harness's own comparison logic were found and fixed while establishing this (documented in
+  `tests/README.md`) — an exception-based short-circuit that silently skipped sibling keys after
+  the first mismatch, and a filename-parsing bug that mis-classified `stgnn_results.json`.
+
+### Fixed — documentation
+- `REPRODUCIBILITY.md`: new "Determinism, measured" section. Two things were actually measured,
+  not assumed: (1) the same training step run 10 times on one machine — `XGBRegressor` and
+  `LinearRegression` were bit-identical across all 10 runs; `RandomForestRegressor` showed the
+  last-bit thread-summation noise `RC1_RELEASE_CERTIFICATE.md` already documents (max ~2.7e-15
+  absolute), confirming that documented claim independently with 10 runs instead of 2; (2)
+  cross-platform reproduction (this Windows run vs. the Linux-generated shipped data) — every
+  non-XGBoost output is exact, while `XGBRegressor` aggregate `r2` diverges by 5.7e-4 to 1.7e-2
+  relative across the three `02_train_ml_models.py` targets, individual predictions by up to
+  ~30%. This is the opposite of what `RC1_RELEASE_CERTIFICATE.md` names as the noise source (it
+  discusses only RandomForest). Not a defect in the pipeline's seeding or design — see the new
+  section for the mechanism and what it means for reproducing Table 4 on a non-Linux platform.
+- `REPRODUCIBILITY.md`, "Random seeds": removed the claim that `n_jobs=1` gives XGBoost
+  "cross-machine determinism". Measured directly (above): `n_jobs=1` gives exact same-machine
+  determinism, which is what was actually verified; it does not give cross-machine determinism,
+  which was not previously tested and is now shown not to hold.
+- `.gitignore`: added `.pytest_cache/`, missing despite `__pycache__/` and `.venv/` already being
+  covered.
+
+### Fixed — code (pyflakes, behaviour-preserving)
+Eight findings from `pyflakes` across the 13 scripts, each confirmed inert either by construction
+(dead imports/locals that were never read; an f-string with no `{}` placeholder, which Python
+evaluates identically to the plain string) or by re-running the full pipeline afterward:
+- `code/04_make_figures.py`: removed unused `FancyArrowPatch` import (the script uses
+  `ax.annotate` for arrows, not this class).
+- `code/v2_02_pinn_dispersion.py`: removed a dead local `T = arr_dict["flow"].shape[0]` inside
+  `build_feats()`, never read afterward in that function.
+- `code/v2_03_stgnn.py`: removed unused `import pandas as pd` (the script never calls `pd.*`).
+- `code/v2_04_marl.py`: removed a dead local `h = s % N_HOUR_STATES` inside `greedy_policy()`,
+  never read afterward; and removed an unnecessary `f` prefix from a string with no placeholder.
+- `code/v2_05_semantic_6g.py`, `code/v2_06_health.py`: same unnecessary-`f`-prefix fix.
+- `code/v2_07_figures.py`: removed unused `import os as _os`. The script's `os.listdir`/
+  `os.path.getsize` calls near the end of the file use a separate, plain `import os` already
+  present at line 156 — confirmed by grep before removing the alias, since the two names look
+  similar enough to invite a mistake here.
+
+### Not changed
+- No emission factor, coupling coefficient, background formula, clip bound, scenario multiplier,
+  split ratio, or seed.
+- No `data/` or `figures/` file (manifest confirms: 61 files now, up from 59 — the two new
+  `tests/` files — everything else hash-identical to v1.0.3).
+- Chapter §4.2's SUMO/network-release gap (already disclosed as an accepted limitation) — left
+  unchanged. A concrete plan for closing it honestly, without touching the manuscript or any
+  published number, was written up for the author's review but not implemented this pass.
+
 ## [1.0.3] — second source-verification pass over code comments and documentation
 
 Documentation and code comments only. Executable code is unchanged: for each of the seven edited
