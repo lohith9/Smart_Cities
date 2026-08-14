@@ -40,6 +40,9 @@ EF_NO2_LDV,  EF_NO2_HDV  = 0.42,  2.10
 
 def scenario(name, *, flow_mult, speed_mult, ctrl_latency_ms, ctrl_hz,
              extra_delay_red=0.0):
+    """flow_mult may be a scalar (S0-S2, uniform across all hours) or a
+    per-row array (S3, which multiplies only the peak-window hours) -
+    pandas broadcasts either identically."""
     flow  = df.traffic_flow_vph * flow_mult
     spd   = (df.mean_speed_kmh * speed_mult).clip(8, 50)
     # Travel time per km
@@ -100,37 +103,10 @@ s2 = scenario("S2 AI-Adaptive (6G)",
 # AI + demand mgmt: -15% peak demand, +12% speed, dynamic routing
 peak_mask = df.hour.isin([7,8,9,17,18,19]).values
 flow_mult_arr = np.where(peak_mask, 0.85, 1.0)
-def scenario_arr(name, flow_mult_arr, speed_mult, ctrl_latency_ms, ctrl_hz, extra_red):
-    flow  = df.traffic_flow_vph * flow_mult_arr
-    spd   = (df.mean_speed_kmh * speed_mult).clip(8, 50)
-    tt = 60.0 / spd
-    free = 60.0 / 40.0
-    delay = (tt - free).clip(lower=0) * (1 - extra_red)
-    ldv = 1 - df.hdv_fraction
-    e_pm = flow * (ldv * EF_PM25_LDV + df.hdv_fraction * EF_PM25_HDV)
-    e_no = flow * (ldv * EF_NO2_LDV  + df.hdv_fraction * EF_NO2_HDV)
-    disp = 1.0 / (np.maximum(df.wind_speed_ms, 0.5) * df.mixing_height_m / 1000)
-    idle = (df.mean_speed_kmh / np.maximum(spd, 5)).clip(0.78, 1.5)
-    pm25 = 8.5 + 0.32  * e_pm * disp * idle
-    no2  = 14  + 0.088 * e_no * disp * idle
-    return {
-        "scenario": name,
-        "mean_flow_vph":   float(flow.mean()),
-        "peak_flow_vph":   float(flow[df.hour.isin([8,17,18])].mean()),
-        "mean_speed_kmh":  float(spd.mean()),
-        "mean_delay_min_per_km": float(delay.mean()),
-        "peak_delay_min_per_km": float(delay[df.hour.isin([8,17,18])].mean()),
-        "mean_pm25_ugm3":  float(pm25.mean()),
-        "mean_no2_ugm3":   float(no2.mean()),
-        "peak_pm25_ugm3":  float(pm25[df.hour.isin([8,17,18])].mean()),
-        "peak_no2_ugm3":   float(no2[df.hour.isin([8,17,18])].mean()),
-        "no2_exceedance_pct":  float((no2 > 40).mean() * 100),
-        "ctrl_latency_ms": ctrl_latency_ms,
-        "ctrl_hz":         ctrl_hz,
-    }
-s3 = scenario_arr("S3 AI + 6G + Demand-Mgmt", flow_mult_arr,
-                  speed_mult=1.12, ctrl_latency_ms=0.8, ctrl_hz=10.0,
-                  extra_red=0.05)
+s3 = scenario("S3 AI + 6G + Demand-Mgmt",
+              flow_mult=flow_mult_arr, speed_mult=1.12,
+              ctrl_latency_ms=0.8, ctrl_hz=10.0,
+              extra_delay_red=0.05)
 
 rows = [s0, s1, s2, s3]
 # Compute % changes vs baseline

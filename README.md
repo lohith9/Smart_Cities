@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Status** | Stable release |
-| **Version** | v1.0.4 — archived and cited release: **v1.0.0** (see `CHANGELOG.md`) |
+| **Version** | v1.0.5 — archived and cited release: **v1.0.0** (see `CHANGELOG.md`) |
 | **Reproducibility** | Fully reproducible from source — `bash run_all.sh` |
 | **Data** | Synthetic, calibrated — see `DISCLAIMER.md` |
 | **Software DOI** | [10.5281/zenodo.21679390](https://doi.org/10.5281/zenodo.21679390) (v1.0.0) · concept DOI [10.5281/zenodo.21679389](https://doi.org/10.5281/zenodo.21679389) |
