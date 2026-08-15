@@ -3,6 +3,40 @@
 All notable changes to this reproducibility package.
 Format follows Keep a Changelog; versioning follows Semantic Versioning.
 
+## [1.0.5] — remove duplicated scenario logic
+
+Code-quality only. Verified against the chapter and its Supplementary Material line by line
+before and after this change: every equation, constant, clip bound, noise amplitude,
+hyperparameter, scenario multiplier, and every value in Tables 4-6, matches exactly — see the
+verification note below. No emission factor, coupling coefficient, background formula, scenario
+multiplier, or seed was touched.
+
+### Changed
+- `code/03_run_scenarios.py`: removed `scenario_arr()`, a 28-line near-duplicate of `scenario()`
+  whose only real difference was accepting a per-row array instead of a scalar for the flow
+  multiplier (needed for S3's peak-window-only demand reduction). `scenario()`'s `flow_mult`
+  parameter already broadcasts correctly against either a scalar or a numpy array via pandas'
+  standard elementwise multiplication (`df.traffic_flow_vph * flow_mult`), so the two functions
+  computed identically and existed only because of a naming accident, not a real difference in
+  behaviour. S3 now calls the single `scenario()` function directly. Net: -30 lines, two
+  divergence-prone copies of the delay/emission/dispersion computation collapsed into one.
+
+### Verification
+- `ast.parse` succeeds; `pyflakes` clean.
+- Full 12-step pipeline re-run in a fresh pinned environment (Windows, packages exactly per
+  `requirements.txt`) via `tests/verify_reproduction.py`: `data/scenarios.json` and
+  `data/scenarios.csv` — the two files this change could possibly affect — show **zero**
+  differences against the committed values, at any tolerance. Every other data file's
+  divergence count (the known, already-documented XGBoost cross-platform effect from v1.0.4)
+  is unchanged: still exactly 1225 flagged values, confirming this change affected nothing else
+  in the pipeline either.
+- Cross-checked the running code, after this change, against `_SUBMIT/02_Chapter.pdf` and
+  `_SUBMIT/06_Supplementary_Material.pdf` (the submitted, frozen source of truth): Equations
+  1-3, every constant in Appendix B, Tables 3-6, and the two specific counterfactual delay
+  percentages stated in the Conclusion (recomputing S3 without its direct delay term reproduces
+  43.33%, matching the chapter's "~43%"; S2's uplift without that term reproduces 34.07%,
+  matching "~34%") all still hold exactly.
+
 ## [1.0.4] — reproduction harness, measured determinism, static cleanup
 
 Adds a runnable reproduction check and documents what it found. No seed, hyperparameter,
